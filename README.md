@@ -77,8 +77,11 @@ TLCL Processes Hub/
     - Respuesta: `{ "count": number, "rows": [ { ... } ] }`.
 
 - HANA Stored Procedures
-  - `GET /tlcl-hub/tlcl01?p1={valor}&p2={valor}`
-    - Ejecuta el SP `"<SCHEMA>"."SP_TLCL_01"` con parámetros `p1` y `p2`.
+  - `POST /tlcl-hub/tlcl01`
+    - Ejecuta el SP `"<SCHEMA>"."SP_TLCL_01"` con parámetros en el cuerpo JSON:
+      ```json
+      {"p1": "VALOR1", "p2": "VALOR2"}
+      ```
     - Respuesta típica:
       ```json
       {
@@ -98,7 +101,9 @@ TLCL Processes Hub/
 - `curl` (Windows PowerShell):
   ```powershell
   curl "http://localhost:8000/tlcl-hub/ee-site?limit=10"
-  curl "http://localhost:8000/tlcl-hub/tlcl01?p1=VALOR1&p2=VALOR2"
+  curl -X POST "http://localhost:8000/tlcl-hub/tlcl01" ^
+    -H "Content-Type: application/json" ^
+    -d "{\"p1\": \"VALOR1\", \"p2\": \"VALOR2\"}"
   ```
 
 - Swagger UI: visitar `http://localhost:8000/docs` y probar los endpoints.

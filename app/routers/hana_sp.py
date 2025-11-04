@@ -1,5 +1,7 @@
 import logging
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Body
+from pydantic import BaseModel
 
 from app.db.hana import get_hana_connection, call_procedure_with_outputs
 
@@ -9,11 +11,14 @@ logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/tlcl-hub", tags=["HANA Stored Procedures"])
 
+class TLCL01Payload(BaseModel):
+    p1: str
+    p2: str
 
-@router.get("/tlcl01", summary="TLCL01")
+
+@router.post("/tlcl01", summary="TLCL01")
 def call_tlcl01(
-    p1: str = Query(..., description="Parámetro 1"),
-    p2: str = Query(..., description="Parámetro 2"),
+    payload: TLCL01Payload = Body(..., description="Parámetros para SP_TLCL_01"),
     conn=Depends(get_hana_connection),
 ):
     """Ejecuta el stored procedure SP_TLCL_01 y devuelve su resultado."""
@@ -21,7 +26,7 @@ def call_tlcl01(
     
     try:
         # Llamar al procedimiento con la nueva función
-        result = call_procedure_with_outputs(conn, proc_name, (p1, p2))
+        result = call_procedure_with_outputs(conn, proc_name, (payload.p1, payload.p2))
         
         # Extraer datos de salida
         output_params = result.get('output_params')
