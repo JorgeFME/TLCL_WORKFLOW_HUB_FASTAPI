@@ -1,0 +1,1 @@
+"""Componentes de configuración y utilidades core."""

@@ -1,0 +1,8 @@
+applications:
+  - name: tlcl-processes-hub
+    memory: 256M
+    instances: 1
+    buildpacks:
+      - python_buildpack
+    env:
+      PYTHONUNBUFFERED: true
