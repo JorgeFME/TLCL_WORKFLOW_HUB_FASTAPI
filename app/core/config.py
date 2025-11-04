@@ -27,6 +27,12 @@ class Settings(BaseSettings):
     HANA_SSL_VALIDATE: bool = Field(default=False)
     HANA_SSL_TRUST_STORE: Optional[str] = Field(default=None)
 
+    # CORS
+    CORS_ALLOW_ORIGINS: Optional[str] = Field(default="*")
+    CORS_ALLOW_METHODS: Optional[str] = Field(default="*")
+    CORS_ALLOW_HEADERS: Optional[str] = Field(default="*")
+    CORS_ALLOW_CREDENTIALS: bool = Field(default=False)
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     def _load_from_vcap(self) -> None:

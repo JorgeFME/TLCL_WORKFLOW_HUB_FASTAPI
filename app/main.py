@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from app.routers import hana_sql
 from app.routers import hana_sp
 from app.core.config import Settings
@@ -7,6 +8,25 @@ from app.dependencies import get_settings
 
 def create_app() -> FastAPI:
     app = FastAPI(title="TLCL Processes Hub", version="0.1.0")
+
+    # Configuración CORS desde entorno
+    settings = get_settings()
+
+    def _to_list(value: str | None, default: list[str]) -> list[str]:
+        if not value:
+            return default
+        v = value.strip()
+        if v == "*":
+            return ["*"]
+        return [item.strip() for item in v.split(",") if item.strip()]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=_to_list(settings.CORS_ALLOW_ORIGINS, ["*"]),
+        allow_methods=_to_list(settings.CORS_ALLOW_METHODS, ["*"]),
+        allow_headers=_to_list(settings.CORS_ALLOW_HEADERS, ["*"]),
+        allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
+    )
 
     # Routers
     app.include_router(hana_sql.router)

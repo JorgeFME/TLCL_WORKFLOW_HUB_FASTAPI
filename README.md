@@ -43,6 +43,12 @@ TLCL Processes Hub/
   - `HANA_ENCRYPT` (por defecto `true`), `HANA_SSL_VALIDATE` (en local puede ser `false`)
   - `HANA_SSL_TRUST_STORE` (ruta a certificado, opcional)
 
+- CORS (peticiones desde clientes web u otros orígenes):
+  - `CORS_ALLOW_ORIGINS` (por defecto `*` — permite todos). Ejemplo: `https://miapp.com,https://otra.com`
+  - `CORS_ALLOW_METHODS` (por defecto `*`). Ejemplo: `GET,POST`
+  - `CORS_ALLOW_HEADERS` (por defecto `*`). Ejemplo: `Content-Type,Authorization`
+  - `CORS_ALLOW_CREDENTIALS` (por defecto `false`). Usa `true` si necesitas enviar cookies/autenticación.
+
 - Soporte `VCAP_SERVICES` (Cloud Foundry):
   - Detecta servicios con etiqueta que contenga `hana` y usa sus `credentials`.
   - Si `VCAP_SERVICES` incluye certificado, se escribe temporalmente y se activa la validación de certificado.
@@ -155,6 +161,10 @@ TLCL Processes Hub/
 
 - Esquema incorrecto:
   - Revisa `HANA_SCHEMA` y que el usuario tenga permisos sobre el esquema/configurado.
+
+- Error de CORS (No 'Access-Control-Allow-Origin' header):
+  - Configura `CORS_ALLOW_ORIGINS` con los dominios que vayan a llamar tu API (o `*` en DEV).
+  - Asegúrate de incluir `OPTIONS` si tu cliente hace preflight; con `CORS_ALLOW_METHODS=*` queda cubierto.
 
 ## Próximos pasos sugeridos
 
