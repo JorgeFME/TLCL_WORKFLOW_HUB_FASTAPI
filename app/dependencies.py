@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from app.core.config import Settings
+from app.core.settings import Settings
 
 
 @lru_cache

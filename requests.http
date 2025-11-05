@@ -1,0 +1,29 @@
+### Listar EE Site
+GET http://127.0.0.1:5000/tlcl-hub/ee-site?limit=10
+
+### Ejecutar SP_TLCL_01 (local)
+POST http://127.0.0.1:5000/tlcl-hub/tlcl01
+Content-Type: application/json
+
+{
+  "p1": "?",
+  "p2": "?"
+}
+
+### Ejecutar SP_TLCL_COBCEN (local)
+POST http://127.0.0.1:5000/tlcl-hub/cobcen
+Content-Type: application/json
+
+{
+  "p1": "?",
+  "p2": "?"
+}
+
+### Ejecutar SP_TLCL_SIR (local)
+POST http://127.0.0.1:5000/tlcl-hub/sir
+Content-Type: application/json
+
+{
+  "p1": "?",
+  "p2": "?"
+}

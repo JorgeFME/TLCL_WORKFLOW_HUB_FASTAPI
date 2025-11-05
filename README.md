@@ -15,12 +15,12 @@ Aplicación FastAPI para exponer endpoints de consulta SQL y ejecución de Store
 TLCL Processes Hub/
 ├─ app/
 │  ├─ core/
-│  │  └─ config.py          # Configuración (env/VCAP_SERVICES)
+│  │  └─ settings.py        # Configuración (env/VCAP_SERVICES)
 │  ├─ db/
-│  │  └─ hana.py            # Conexión y helpers HANA (query y SP)
+│  │  └─ hana_client.py     # Conexión y helpers HANA (query y SP)
 │  ├─ routers/
-│  │  ├─ hana_sql.py        # Endpoints de SQL (ej. TELCEL_EE_SITE)
-│  │  └─ hana_sp.py         # Endpoints de Stored Procedures (ej. TLCL01)
+│  │  ├─ hana_sql_queries.py # Endpoints de SQL (ej. TELCEL_EE_SITE)
+│  │  └─ hana_procedures.py  # Endpoints de Stored Procedures (ej. TLCL01)
 │  ├─ dependencies.py       # Settings cacheado (FastAPI Depends)
 │  └─ main.py               # FastAPI app y endpoint raíz
 ├─ .env.example             # Variables de entorno para dev local
@@ -73,6 +73,59 @@ TLCL Processes Hub/
   - OpenAPI JSON: `http://localhost:8000/openapi.json`
 
 ## Endpoints
+
+Detalles y ejemplos
+- General
+  - GET `/` — devuelve metadatos de la API, configuración visible y enlaces útiles.
+
+- HANA DB - SQL
+  - GET `/tlcl-hub/ee-site`
+    - Query: `limit` (int, por defecto 10, rango 1–1000)
+    - Respuesta: `{ "count": number, "rows": [ { ... } ] }`
+    - Ejemplo:
+      ```bash
+      curl "http://localhost:8000/tlcl-hub/ee-site?limit=10"
+      ```
+
+- HANA Stored Procedures
+  - POST `/tlcl-hub/tlcl01`
+    - Body (JSON): `{ "p1": "string", "p2": "string" }`
+    - Respuesta (según SP):
+      - `success` (bool)
+      - `success_flag` (string|null)
+      - `message` (string|null)
+      - `rows` (array de objetos, si el SP devuelve result set)
+      - `output_params` (array|null)
+      - `result_sets_count` (int)
+    - Ejemplo:
+      ```bash
+      curl -X POST "http://localhost:8000/tlcl-hub/tlcl01" \
+        -H "Content-Type: application/json" \
+        -d '{ "p1": "VALOR1", "p2": "VALOR2" }'
+      ```
+
+  - POST `/tlcl-hub/cobcen`
+    - Body (JSON): `{ "p1": "string", "p2": "string" }`
+    - Semántica y respuesta igual al endpoint TLCL01.
+    - Ejemplo:
+      ```bash
+      curl -X POST "http://localhost:8000/tlcl-hub/cobcen" \
+        -H "Content-Type: application/json" \
+        -d '{ "p1": "VALOR1", "p2": "VALOR2" }'
+      ```
+
+  - POST `/tlcl-hub/sir`
+    - Body (JSON): `{ "p1": "string", "p2": "string" }`
+    - Semántica y respuesta igual al endpoint TLCL01.
+    - Ejemplo:
+      ```bash
+      curl -X POST "http://localhost:8000/tlcl-hub/sir" \
+        -H "Content-Type: application/json" \
+        -d '{ "p1": "VALOR1", "p2": "VALOR2" }'
+      ```
+
+Nota
+- El archivo `requests.http` incluye ejemplos listos para usar. Ajusta host/puerto según tu entorno (`localhost:8000` como en los ejemplos arriba, o `127.0.0.1:5000` si tu servidor corre en ese puerto).
 
 - General
   - `GET /` — Resumen de la API, secciones y configuración no sensible.

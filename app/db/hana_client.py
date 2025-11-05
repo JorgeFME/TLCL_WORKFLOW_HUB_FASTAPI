@@ -3,7 +3,7 @@ from typing import Generator, Optional
 
 from fastapi import Depends
 
-from app.core.config import Settings
+from app.core.settings import Settings
 from app.dependencies import get_settings
 
 

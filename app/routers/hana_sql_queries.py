@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Query
 
-from app.db.hana import get_hana_connection, execute_query
+from app.db.hana_client import get_hana_connection, execute_query
 from app.dependencies import get_settings
-from app.core.config import Settings
+from app.core.settings import Settings
 
 
 router = APIRouter(prefix="/tlcl-hub", tags=["HANA DB - SQL"])

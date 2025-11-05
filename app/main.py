@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import hana_sql
-from app.routers import hana_sp
-from app.core.config import Settings
+from app.routers import hana_sql_queries
+from app.routers import hana_procedures
+from app.core.settings import Settings
 from app.dependencies import get_settings
 
 
@@ -29,8 +29,8 @@ def create_app() -> FastAPI:
     )
 
     # Routers
-    app.include_router(hana_sql.router)
-    app.include_router(hana_sp.router)
+    app.include_router(hana_sql_queries.router)
+    app.include_router(hana_procedures.router)
 
     app.summary = "API para ejecutar procesos SQL y Stored Procedures en HANA"
     # Root: información básica y enlaces útiles con el prefijo
@@ -54,6 +54,16 @@ def create_app() -> FastAPI:
                         "path": "/tlcl-hub/tlcl01",
                         "description": "Ejecuta SP_TLCL_01 (p1, p2)",
                         "sample": "/tlcl-hub/tlcl01?p1=VALOR1&p2=VALOR2",
+                    },
+                    "cobcen": {
+                        "path": "/tlcl-hub/cobcen",
+                        "description": "Ejecuta SP_TLCL_COBCEN (p1, p2)",
+                        "sample": "/tlcl-hub/cobcen?p1=VALOR1&p2=VALOR2",
+                    },
+                    "sir": {
+                        "path": "/tlcl-hub/sir",
+                        "description": "Ejecuta SP_TLCL_SIR (p1, p2)",
+                        "sample": "/tlcl-hub/sir?p1=VALOR1&p2=VALOR2",
                     }
                 },
             },
